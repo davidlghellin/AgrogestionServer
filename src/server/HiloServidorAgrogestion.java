@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 
 /**
  *
@@ -70,7 +71,8 @@ public class HiloServidorAgrogestion extends Thread
                 {
                     salidaSocket.writeBytes(("ERROR_INICIO") + '\n');
                     finalizar = true;
-                } else
+                }
+                else
                 {
                     user = entradaSocket.readLine();
                     System.out.println(user);
@@ -82,13 +84,18 @@ public class HiloServidorAgrogestion extends Thread
 
                     while (finalizar == false)
                     {
+                        System.out.println("Estamos esperando para leer comando hiloAgrogestionServer");
                         comando = entradaSocket.readLine();
+                        System.out.println("comando leido hiloAgrogestionServer");
 
+                        System.out.println("Antes de consulta a consulta");
                         if (comando.compareToIgnoreCase(("CONSULTA")) == 0)
                         {
-                            System.out.println("CONSULTA");
+                            System.out.println("Entramos a consulta");
                             select = entradaSocket.readLine();
+                            System.out.println("Imprimiomos la consulata" + select);
                             tablaConsulta = entradaSocket.readLine();
+                            System.out.println("Imprimiomos la tabla con: " + tablaConsulta);
 
                             salidaSocket.writeBytes(("OK_DATOS") + '\n');
 
@@ -97,71 +104,125 @@ public class HiloServidorAgrogestion extends Thread
                             {
                                 ResultSet rs;
                                 rs = con.hacerConsulta(select);
-                                String codigo, nombre, ciudad, descripcion;
                                 ObjectOutputStream resultadoCon = new ObjectOutputStream(socketCliente.getOutputStream());
 
-                                if (tablaConsulta.compareToIgnoreCase(("ESTADISTICA")) == 0)
+                                //metadata
+                                ResultSetMetaData rsmd = rs.getMetaData();
+                                int cantidadColumnas = rsmd.getColumnCount();
+                                if (rs == null)
                                 {
-                                    rs.next();
-                                    resultadoCon.writeObject(rs.getString("GESTIONES"));
-                                } else
+                                    resultadoCon.writeObject(new Integer(0));
+                                }
+                                else
                                 {
-                                    if (rs == null)
+                                    int numRegistros = 0;
+                                    while (rs.next())
                                     {
-                                        resultadoCon.writeObject(new Integer(0));
-                                    } else
+                                        numRegistros++;
+                                    }
+
+                                    resultadoCon.writeObject(new Integer(numRegistros));
+                                    rs.beforeFirst();
+
+                                    if (tablaConsulta.compareToIgnoreCase(("FINCA")) == 0)
                                     {
-                                        int numRegistros = 0;
                                         while (rs.next())
                                         {
-                                            numRegistros++;
+                                            for (int i = 0; i < cantidadColumnas; i++)
+                                            {
+                                                resultadoCon.writeObject(rs.getObject(i + 1));
+                                            }
+
+                                            /*   resultadoCon.writeObject(rs.getString("Nombre"));
+                                             resultadoCon.writeObject(rs.getString("Localizacion"));
+                                             resultadoCon.writeObject(rs.getString("Descripcion"));*/
+                                        }
+                                        System.out.println("fin de consulta finca");
+                                    } ////finmio
+                                    else if (tablaConsulta.compareToIgnoreCase(("PARCELA")) == 0)
+                                    {
+                                        while (rs.next())
+                                        {
+                                            for (int i = 0; i < cantidadColumnas; i++)
+                                            {
+                                                resultadoCon.writeObject(rs.getObject(i + 1));
+                                            }
+                                            /*
+                                             resultadoCon.writeObject(rs.getString("IdParcela"));
+                                             resultadoCon.writeObject(rs.getString("IdFinca"));
+                                             resultadoCon.writeObject(rs.getString("Descripcion"));*/
+                                        }
+                                    }
+                                    else if (tablaConsulta.compareToIgnoreCase(("TIPO")) == 0)
+                                    {
+                                        while (rs.next())
+                                        {
+                                            for (int i = 0; i < cantidadColumnas; i++)
+                                            {
+                                                resultadoCon.writeObject(rs.getObject(i + 1));
+                                            }
+                                            /*
+                                             resultadoCon.writeObject(rs.getString("Nombre"));
+                                             resultadoCon.writeObject(rs.getString("Descripcion"));*/
+                                        }
+                                    }
+                                    else if (tablaConsulta.compareToIgnoreCase(("VARIEDAD")) == 0)
+                                    {
+                                        while (rs.next())
+                                        {
+                                            for (int i = 0; i < cantidadColumnas; i++)
+                                            {
+                                                resultadoCon.writeObject(rs.getObject(i + 1));
+                                            }
+                                            /*
+                                             resultadoCon.writeObject(rs.getString("Nombre"));
+                                             resultadoCon.writeObject(rs.getString("IdTipo"));*/
+                                        }
+                                    }
+                                    else if (tablaConsulta.compareToIgnoreCase(("CULTIVAR")) == 0)
+                                    {
+                                        while (rs.next())
+                                        {
+                                            for (int i = 0; i < cantidadColumnas; i++)
+                                            {
+                                                resultadoCon.writeObject(rs.getObject(i + 1));
+                                            }/*
+                                             resultadoCon.writeObject(rs.getString("Id"));
+                                             resultadoCon.writeObject(rs.getString("FechaInicio"));
+                                             resultadoCon.writeObject(rs.getString("FechaFin"));
+                                             resultadoCon.writeObject(rs.getString("IdVariedad"));
+                                             resultadoCon.writeObject(rs.getString("IdParcela"));
+                                             resultadoCon.writeObject(rs.getString("Unidades"));*/
+
+                                        }
+                                    }
+                                    else if (tablaConsulta.compareToIgnoreCase(("INGRESOVENTA")) == 0)
+                                    {
+                                        while (rs.next())
+                                        {
+                                            for (int i = 0; i < cantidadColumnas; i++)
+                                            {
+                                                resultadoCon.writeObject(rs.getObject(i + 1));
+                                            }/*
+                                             resultadoCon.writeObject(rs.getString("Id"));
+                                             resultadoCon.writeObject(rs.getString("Fecha"));
+                                             resultadoCon.writeObject(rs.getString("NombreCliente"));
+                                             resultadoCon.writeObject(rs.getString("PrecioUnidad"));
+                                             resultadoCon.writeObject(rs.getString("Cantidad"));
+                                             resultadoCon.writeObject(rs.getString("Total"));
+                                             resultadoCon.writeObject(rs.getString("IdCultivar"));
+                                             resultadoCon.writeObject(rs.getString("Cobrado"));*/
+
                                         }
 
-                                        resultadoCon.writeObject(new Integer(numRegistros));
-
-                                        rs.beforeFirst();
-
-                                        if (tablaConsulta.compareToIgnoreCase(("PROYECTO")) == 0)
+                                    }
+                                    else if (tablaConsulta.compareToIgnoreCase(("INGRESOOTRO")) == 0)
+                                    {
+                                        while (rs.next())
                                         {
-                                            while (rs.next())
+                                            for (int i = 0; i < cantidadColumnas; i++)
                                             {
-                                                resultadoCon.writeObject(rs.getString("CODIGO"));
-                                                resultadoCon.writeObject(rs.getString("NOMBRE"));
-                                                resultadoCon.writeObject(rs.getString("CIUDAD"));
-                                                resultadoCon.writeObject(rs.getString("DESCRIPCION"));
-                                            }
-                                        } else if (tablaConsulta.compareToIgnoreCase(("PIEZA")) == 0)
-                                        {
-                                            while (rs.next())
-                                            {
-                                                resultadoCon.writeObject(rs.getString("CODIGO"));
-                                                resultadoCon.writeObject(rs.getString("NOMBRE"));
-                                                resultadoCon.writeObject(rs.getString("PRECIO"));
-//                        resultadoCon.writeInt(rs.getInt(res.getString("PRECIO")));
-                                                resultadoCon.writeObject(rs.getString("DESCRIPCION"));
-                                            }
-                                        } else if (tablaConsulta.compareToIgnoreCase(("GESTION")) == 0)
-                                        {
-                                            while (rs.next())
-                                            {
-                                                resultadoCon.writeObject(rs.getString("CODIGO"));
-                                                resultadoCon.writeObject(rs.getString("PROVEEDOR"));
-                                                resultadoCon.writeObject(rs.getString("PIEZA"));
-                                                resultadoCon.writeObject(rs.getString("PROYECTO"));
-//                        resultadoCon.writeInt(rs.getInt(res.getString("CANTIDAD")));
-                                                resultadoCon.writeObject(rs.getString("CANTIDAD"));
-                                            }
-                                        } else if (tablaConsulta.compareToIgnoreCase(("PROVEEDOR")) == 0)
-                                        {
-                                            while (rs.next())
-                                            {
-                                                resultadoCon.writeObject(rs.getString("CODIGO"));
-                                                resultadoCon.writeObject(rs.getString("NOMBRE"));
-                                                resultadoCon.writeObject(rs.getString("APELLIDOS"));
-                                                resultadoCon.writeObject(rs.getString("DIRECCION"));
-                                                resultadoCon.writeObject(rs.getString("POBLACION"));
-                                                resultadoCon.writeObject(rs.getString("PROVINCIA"));
-                                                resultadoCon.writeObject(rs.getString("TELEFONO"));
+                                                resultadoCon.writeObject(rs.getObject(i + 1));
                                             }
                                         }
                                     }
@@ -172,7 +233,8 @@ public class HiloServidorAgrogestion extends Thread
                                 salidaSocket.writeBytes(("ERROR_DATOS"));
                                 System.out.println(e.toString());
                             }
-                        } else if (comando.compareToIgnoreCase(("FIN")) == 0)
+                        }
+                        else if (comando.compareToIgnoreCase(("FIN")) == 0)
                         {
                             finalizar = true;
                             fechaFin = entradaSocket.readLine();
@@ -180,6 +242,7 @@ public class HiloServidorAgrogestion extends Thread
 
                             salidaSocket.writeBytes(("OK_FIN") + '\n');
                             salidaSocket.close();
+                            System.out.println("socket cerrado");
                         }
                     }
                 }
@@ -190,5 +253,4 @@ public class HiloServidorAgrogestion extends Thread
             System.out.println(e.toString());
         }
     }
-
 }
