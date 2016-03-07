@@ -25,18 +25,13 @@ public class ServidorFrameCorriendo
             //Para cada conexión nueva crea un hilo servidor que atenderá a ese cliene concreto
             while (true)
             {
-                System.out.println("servidor frame 0");
                 Socket socketConexion = socketPrincipal.accept();
-                System.out.println("servidor frame 1");
                 HiloServidorAgrogestion hilo = new HiloServidorAgrogestion(socketConexion, info, conectados++);
-                System.out.println("servidor frame 2");
                 hilo.start();
-                System.out.println("servidor frame 3");
             }
         } catch (Exception ex)
         {
             System.out.println("Fallo al crear la conexion");
-
         }
     }
 }

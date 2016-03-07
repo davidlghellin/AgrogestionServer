@@ -132,8 +132,7 @@ public class HiloServidorAgrogestion extends Thread
                                             {
                                                 resultadoCon.writeObject(rs.getObject(i + 1));
                                             }
-
-                                            /*   resultadoCon.writeObject(rs.getString("Nombre"));
+                                             /*resultadoCon.writeObject(rs.getString("Nombre"));
                                              resultadoCon.writeObject(rs.getString("Localizacion"));
                                              resultadoCon.writeObject(rs.getString("Descripcion"));*/
                                         }
@@ -147,8 +146,7 @@ public class HiloServidorAgrogestion extends Thread
                                             {
                                                 resultadoCon.writeObject(rs.getObject(i + 1));
                                             }
-                                            /*
-                                             resultadoCon.writeObject(rs.getString("IdParcela"));
+                                             /*resultadoCon.writeObject(rs.getString("IdParcela"));
                                              resultadoCon.writeObject(rs.getString("IdFinca"));
                                              resultadoCon.writeObject(rs.getString("Descripcion"));*/
                                         }
@@ -161,8 +159,7 @@ public class HiloServidorAgrogestion extends Thread
                                             {
                                                 resultadoCon.writeObject(rs.getObject(i + 1));
                                             }
-                                            /*
-                                             resultadoCon.writeObject(rs.getString("Nombre"));
+                                             /*resultadoCon.writeObject(rs.getString("Nombre"));
                                              resultadoCon.writeObject(rs.getString("Descripcion"));*/
                                         }
                                     }
@@ -174,8 +171,7 @@ public class HiloServidorAgrogestion extends Thread
                                             {
                                                 resultadoCon.writeObject(rs.getObject(i + 1));
                                             }
-                                            /*
-                                             resultadoCon.writeObject(rs.getString("Nombre"));
+                                             /*resultadoCon.writeObject(rs.getString("Nombre"));
                                              resultadoCon.writeObject(rs.getString("IdTipo"));*/
                                         }
                                     }
@@ -186,8 +182,8 @@ public class HiloServidorAgrogestion extends Thread
                                             for (int i = 0; i < cantidadColumnas; i++)
                                             {
                                                 resultadoCon.writeObject(rs.getObject(i + 1));
-                                            }/*
-                                             resultadoCon.writeObject(rs.getString("Id"));
+                                            }
+                                             /*resultadoCon.writeObject(rs.getString("Id"));
                                              resultadoCon.writeObject(rs.getString("FechaInicio"));
                                              resultadoCon.writeObject(rs.getString("FechaFin"));
                                              resultadoCon.writeObject(rs.getString("IdVariedad"));
@@ -203,8 +199,8 @@ public class HiloServidorAgrogestion extends Thread
                                             for (int i = 0; i < cantidadColumnas; i++)
                                             {
                                                 resultadoCon.writeObject(rs.getObject(i + 1));
-                                            }/*
-                                             resultadoCon.writeObject(rs.getString("Id"));
+                                            }
+                                             /*resultadoCon.writeObject(rs.getString("Id"));
                                              resultadoCon.writeObject(rs.getString("Fecha"));
                                              resultadoCon.writeObject(rs.getString("NombreCliente"));
                                              resultadoCon.writeObject(rs.getString("PrecioUnidad"));
@@ -217,6 +213,46 @@ public class HiloServidorAgrogestion extends Thread
 
                                     }
                                     else if (tablaConsulta.compareToIgnoreCase(("INGRESOOTRO")) == 0)
+                                    {
+                                        while (rs.next())
+                                        {
+                                            for (int i = 0; i < cantidadColumnas; i++)
+                                            {
+                                                resultadoCon.writeObject(rs.getObject(i + 1));
+                                            }
+                                        }
+                                    }
+                                    else if (tablaConsulta.compareToIgnoreCase(("TRABAJADOR")) == 0)
+                                    {
+                                        while (rs.next())
+                                        {
+                                            for (int i = 0; i < cantidadColumnas; i++)
+                                            {
+                                                resultadoCon.writeObject(rs.getObject(i + 1));
+                                            }
+                                        }
+                                    }
+                                    else if (tablaConsulta.compareToIgnoreCase(("GASTOMANOOBRA")) == 0)
+                                    {
+                                        while (rs.next())
+                                        {
+                                            for (int i = 0; i < cantidadColumnas; i++)
+                                            {
+                                                resultadoCon.writeObject(rs.getObject(i + 1));
+                                            }
+                                        }
+                                    }
+                                    else if (tablaConsulta.compareToIgnoreCase(("GASTOPRODUCTO")) == 0)
+                                    {
+                                        while (rs.next())
+                                        {
+                                            for (int i = 0; i < cantidadColumnas; i++)
+                                            {
+                                                resultadoCon.writeObject(rs.getObject(i + 1));
+                                            }
+                                        }
+                                    }
+                                    else if (tablaConsulta.compareToIgnoreCase(("GASTOOTRO")) == 0)
                                     {
                                         while (rs.next())
                                         {
